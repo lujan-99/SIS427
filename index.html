@@ -2,31 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daiana, Niña Hermosa</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-        }
-
-        h1 {
-            font-size: 3rem;
-            color: white;
-            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px 40px;
-            border-radius: 20px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+    <title>Login</title>
 </head>
 <body>
-    <h1>Daiana, Niña Hermosa</h1>
+    <h2>Iniciar Sesión</h2>
+    <form action="login.php" method="post">
+        <label>Usuario:</label>
+        <input type="text" name="usuario" required><br>
+        <label>Contraseña:</label>
+        <input type="password" name="password" required><br>
+        <input type="submit" value="Ingresar">
+    </form>
 </body>
 </html>
