@@ -6,12 +6,30 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #77DD77, #800080); /* Verde lechuga y morado */
+    background: linear-gradient(120deg, #4CAF50, #8E44AD); /* Verde y morado más suave */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+}
+
+.header {
+    text-align: center;
+    color: white;
+    margin-bottom: 50px; /* Más espacio entre el título y el login */
+    letter-spacing: 1.5px; /* Espacio entre letras */
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: normal;
 }
 
 .login-container {
@@ -25,7 +43,7 @@ body {
 
 h2 {
     font-size: 24px;
-    color: #4B0082; /* Morado oscuro */
+    color: #4B0082;
     margin-bottom: 20px;
 }
 
@@ -52,7 +70,7 @@ h2 {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #77DD77; /* Verde lechuga */
+    background-color: #77DD77;
     color: white;
     border: none;
     border-radius: 5px;
@@ -63,17 +81,11 @@ button {
 }
 
 button:hover {
-    background-color: #5FAA5F; /* Verde más oscuro */
+    background-color: #5FAA5F;
 }
 
 .error-message {
     color: red;
     font-size: 14px;
     margin-top: 10px;
-}
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-    color: white;
-    font-size: 18px;
 }
