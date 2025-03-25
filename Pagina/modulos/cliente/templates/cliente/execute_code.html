@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editor de Código</title>
+    <!-- Importar CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/monokai.min.css">
+    <style>
+/* Cyberpunk Neon Theme */
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    color: #0ff; /* Neon cyan */
+    background: linear-gradient(135deg, #000 0%, #1a0033 100%);
+    min-height: 100vh;
+}
+
+/* Scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 255, 0.05),
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline 6s linear infinite;
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100vh; }
+}
+
+.cuerpo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+header {
+    width: 100%;
+    background-color: rgba(75, 0, 130, 0.9); /* Semi-transparent purple */
+    color: #0ff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    border-bottom: 1px solid #0ff;
+}
+
+.SimulacionB {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(133, 2, 53, 0.3);
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.SimulacionB:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+}
+
+.SimulacionB a {
+    color: white;
+    text-decoration: none;
+}
+
+.SimulacionB a:hover {
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    align-items: center;
+}
+
+#editor-container, #output-container {
+    width: 100%;
+    max-width: 800px;
+}
+
+#output {
+    width: 100%;
+    height: 300px;
+    background: #0a0a12;
+    border: 1px solid #0ff;
+    padding: 15px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    color: #0ff;
+    line-height: 1.5;
+}
+
+.button-container {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #666bd4 0%, #850235 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(102, 107, 212, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: translateY(-3px);
+}
+
+/* Glitch effect on hover */
+button:hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 45%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 55%
+    );
+    animation: glitch 0.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+    0% { transform: translateX(-5px); }
+    100% { transform: translateX(5px); }
+}
+
+h3 {
+    color: #0ff;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.error {
+    color: #ff0055; /* Neon red */
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.3);
+    font-weight: bold;
+}
+
+/* Code editor styling */
+#editor {
+    width: 100%;
+    height: 400px;
+    background: #0a0a12;
+    border: 1px solid #0ff;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    color: #0ff;
+    line-height: 1.5;
+    resize: none;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 15px;
+    }
+
+    #editor-container, #output-container {
+        max-width: 100%;
+    }
+
+    #editor {
+        height: 300px;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px 15px;
+    }
+}
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="cuerpo" >
+        <header style="flex-direction: row;">
+            <div class="SimulacionB" style="flex-direction: row;">
+                <a href="{% url 'cliente_principal' %}">Home</a>
+            </div>
+            <div >Editor de Código</div>
+            <div class="SimulacionB">
+                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <div class="container" style="flex-direction: row;">
+            <div id="editor-container">
+                <h3>Editor de Código</h3>
+                <textarea id="code-editor">// Escribe tu código JavaScript aquí
+console.log('Hola mundo');
+
+// Ejemplo de función
+function sumar(a, b) {
+    return a + b;
+}
+
+// Prueba la función
+console.log(sumar(5, 3));</textarea>
+                <div class="button-container">
+                    <button onclick="ejecutarCodigo()">Ejecutar Código</button>
+                    <button onclick="limpiarSalida()">Limpiar Salida</button>
+                </div>
+            </div>
+
+            <div id="output-container">
+                <h3>Salida</h3>
+                <div id="output"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importar scripts de CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
+
+    <script>
+        // Inicializar CodeMirror
+        var editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+            mode: "javascript",
+            theme: "monokai",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 4,
+            tabSize: 4,
+            lineWrapping: true,
+        });
+
+        // Redefinir console.log para mostrar en nuestro output
+        const outputDiv = document.getElementById('output');
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            const output = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+            appendToOutput(output);
+        };
+
+        function appendToOutput(content, isError = false) {
+            const line = document.createElement('div');
+            line.className = isError ? 'error' : '';
+            line.textContent = content;
+            outputDiv.appendChild(line);
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+
+        function ejecutarCodigo() {
+            const codigo = editor.getValue();
+            try {
+                outputDiv.innerHTML = ''; // Limpiar salida
+                eval(codigo);
+            } catch (error) {
+                appendToOutput(error.message, true);
+            }
+        }
+
+        function limpiarSalida() {
+            outputDiv.innerHTML = '';
+        }
+
+        editor.setSize(null, 300);
+    </script>
+</body>
+
+</html>

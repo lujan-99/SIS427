@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control del Servomotor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d6f9ff;
+            margin: 0;
+            padding: 0;
+            color: #0d6d61;
+        }
+
+        header {
+            background-color: #666bd4;
+            padding: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+        }
+
+        nav ul li a:hover {
+            background-color: #850235;
+            border-radius: 5px;
+        }
+
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: #666bd4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .button:hover {
+            background-color: #850235;
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        .input-container input {
+            padding: 10px;
+            width: 150px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .status-bar {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .status-bar span {
+            font-weight: bold;
+            color: #850235;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'control_led_view' %}">LED</a></li>
+                <li><a href="{% url 'control_leds_view' %}">LEDS</a></li>
+                <li><a href="{% url 'control_ledrgb_view' %}">RGB</a></li>
+                <li><a href="{% url 'control_servo_view' %}">Servo</a></li>
+                <li><a href="http://127.0.0.1:8000/administrador/admin-principal/">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <h1>Control del Servomotor</h1>
+        
+        <!-- Botones predefinidos -->
+        <div class="buttons">
+            <button class="button" onclick="controlServo(0)">0°</button>
+            <button class="button" onclick="controlServo(90)">90°</button>
+            <button class="button" onclick="controlServo(180)">180°</button>
+        </div>
+
+        <!-- Campo para ángulo personalizado -->
+        <div class="input-container">
+            <input type="number" id="servoAngle" placeholder="Ingrese un ángulo (0-180)" min="0" max="180">
+            <button class="button" onclick="customServo()">Mover</button>
+        </div>
+
+        <!-- Barra de estado -->
+        <div class="status-bar">
+            <p>Posición actual del servomotor: <span id="servoStatus">0°</span></p>
+        </div>
+    </div>
+
+    <!-- Script para comunicación -->
+    <script>
+        // Actualiza el ángulo en el servidor
+        function controlServo(angle) {
+            fetch(`/administrador/control-servo/SERVO_${angle}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    updateServoStatus(angle);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Actualiza el estado con un ángulo personalizado
+        function customServo() {
+            const angle = document.getElementById("servoAngle").value;
+            if (angle >= 0 && angle <= 180) {
+                controlServo(angle);
+            } else {
+                alert("Ingrese un ángulo válido entre 0 y 180");
+            }
+        }
+
+        // Actualiza la posición mostrada en la barra de estado
+        function updateServoStatus(angle) {
+            const statusElement = document.getElementById("servoStatus");
+            statusElement.textContent = `${angle}°`;
+        }
+    </script>
+</body>
+
+</html>

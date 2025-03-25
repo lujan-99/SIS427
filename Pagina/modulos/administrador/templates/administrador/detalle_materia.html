@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ pelicula.titulo }}</title>
+    <style>
+/* Dark Neon Theme */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+    color: #00ff00; /* Neon green text */
+    background: linear-gradient(135deg, #000000, #1a0033); /* Black to deep purple gradient */
+    min-height: 100vh;
+}
+
+header {
+    background-color: rgba(75, 0, 130, 0.9); /* Semi-transparent purple */
+    color: #00ff00; /* Neon green */
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.2); /* Green glow */
+    border-bottom: 1px solid #00ff00;
+}
+
+.titulo-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.4); /* Glow effect */
+}
+
+.acceder-boton {
+    background-color: #850235; /* Dark red */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.acceder-boton:hover {
+    background-color: #a83b44;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+.container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ff00; /* Neon green */
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.usuario-detalle-container {
+    background-color: rgba(26, 0, 51, 0.8); /* Dark purple */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.2);
+    border: 1px solid #00ff00;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #00ff00; /* Neon green */
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #850235; /* Dark red */
+    padding-bottom: 10px;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
+}
+
+.btn {
+    background-color: #850235; /* Dark red */
+    color: white;
+    padding: 12px 24px;
+    margin: 15px 0;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn:hover {
+    background-color: #a83b44;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+.btn-cancel {
+    background-color: #333; /* Dark gray */
+    margin-left: 15px;
+}
+
+.btn-cancel:hover {
+    background-color: #555;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); /* Green glow */
+}
+
+.tema-detail {
+    background-color: rgba(75, 0, 130, 0.7); /* Purple */
+    color: #00ff00; /* Neon green */
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.2);
+    border: 1px solid #00ff00;
+}
+
+h3 {
+    color: #00ff00; /* Neon green */
+    font-size: 1.5em;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
+}
+
+.contenido h4, .tareas h4 {
+    font-size: 1.3em;
+    color: #00ff00; /* Neon green */
+    margin-bottom: 15px;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    background-color: rgba(26, 0, 51, 0.8); /* Dark purple */
+    color: #00ff00; /* Neon green */
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 255, 0, 0.1);
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+    border-color: #00ff00;
+}
+
+li p {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #00ffaa; /* Bright teal */
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #00ff00; /* Neon green */
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+/* Animation effects */
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); }
+    100% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+}
+
+.usuario-detalle-container, .tema-detail {
+    animation: pulse 4s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    .btn-container {
+        flex-direction: column;
+    }
+    
+    .btn-cancel {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
+    </style>
+        <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <header>
+        <div class="titulo-header">Docente</div>
+        <div>
+            <a href="{% url 'admin_principal' %}" class="acceder-boton">
+                Home
+            </a>
+        </div>
+    </header>
+    <div class="container">
+        <h1>{{ materia.nombre }}</h1>
+        <div class="usuario-detalle-container">
+            <p><strong>Sigla: </strong>{{ materia.sigla }}</p>
+
+            <!-- Botón para añadir un nuevo cuestionario -->
+            <a href="{% url 'crear_cuestionario' materia.id %}" class="btn">Añadir Cuestionario</a>
+
+
+            <!-- Mostrar Cuestionarios subidos -->
+            <div class="cuestionarios">
+                <h4>Cuestionarios</h4>
+                {% if cuestionarios.exists %}  <!-- Verifica si hay cuestionarios disponibles -->
+                <ul>
+                    {% for cuestionario in cuestionarios %}
+                    <li>
+                        <p><strong>Nombre:</strong> {{ cuestionario.nombre }}</p>
+                        <p><strong>Archivo:</strong> 
+                            {% if cuestionario.archivo %}
+                                <a href="{{ cuestionario.archivo.url }}" target="_blank">Ver/Descargar Cuestionario</a>
+                            {% else %}
+                                Sin PDF subido
+                            {% endif %}
+                        </p>
+                        {% if cuestionario.archivo %}
+                        <a href="{% url 'generar_pregunta' cuestionario.id %}" class="btn">Generar Pregunta</a>
+                        {% else %}
+                        <p class="empty">No hay archivo disponible.</p> 
+                            {% endif %}
+
+                        <!-- Botón para generar pregunta -->
+                        
+                        <a href="{% url 'agregar_pregunta' cuestionario.id %}" class="btn">Agregar Pregunta</a>
+            
+                        <!-- Botón para ver la lista de usuarios que entregaron el cuestionario -->
+                        <a href="{% url 'lista_usuarios_entregaron_cuestionario' cuestionario.id %}" class="btn">Ver Entregas</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No hay cuestionarios disponibles.</p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'agregar_tema' materia.id %}" class="btn">Añadir Nuevo Tema</a>
+            <div class="temas-container">
+                {% for tema in temas %}
+                <div class="tema-detail">
+                    <h3>Nombre del Tema: {{ tema.nombre }}</h3>
+                    <a href="{% url 'editar_tema' tema.id %}" class="btn">Editar Tema</a>
+                    <a href="{% url 'eliminar_tema' tema.id %}" class="btn btn-cancel">Eliminar tema</a>
+                    <div class="contenido">
+                        <h4>Contenidos</h4>
+                        <a href="{% url 'agregar_contenido' tema.id %}" class="btn">Agregar contenido</a>
+                        {% if tema.contenidos.all %}
+                        <ul>
+                            {% for contenido in tema.contenidos.all %}
+                            <li>
+                                <p><strong>Título:</strong> {{ contenido.titulo }}</p>
+                                <p><strong>Descripción:</strong> {{ contenido.descripcion }}</p>
+                                <p><strong>Archivo:</strong>
+                                    <a href="{{ contenido.archivo.url }}" target="_blank">Ver/Descargar Documento</a>
+                                </p>
+                                <a href="{% url 'editar_contenido' contenido.id %}" class="btn">Modificar contenido</a>
+                                <a href="{% url 'eliminar_contenido' contenido.id %}" class="btn btn-cancel">Eliminar contenido</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>No hay contenidos disponibles.</p>
+                        {% endif %}
+                    </div>
+                    <div class="tareas">
+                        <h4>Tareas</h4>
+                        <a href="{% url 'agregar_tarea' tema.id %}" class="btn">Agregar tarea</a>
+                        {% if tema.tareas.all %}
+                        <ul>
+                            {% for tarea in tema.tareas.all %}
+                            <li>
+                                <p><strong>Título:</strong> {{ tarea.titulo }}</p>
+                                <p><strong>Descripción:</strong> {{ tarea.descripcion }}</p>
+                                <p><strong>Archivo:</strong> 
+                                    {% if tarea.archivo_pdf %}
+                                        <a href="{{ tarea.archivo_pdf.url }}" target="_blank">Ver/Descargar Documento</a>
+                                    {% else %}
+                                        No hay archivo disponible.
+                                    {% endif %}
+                                </p>
+                                <a href="{% url 'lista_usuarios_entregaron_tarea' tarea.id %}" class="btn">Quienes Subieron</a>
+                                <a href="{% url 'editar_tarea' tarea.id %}" class="btn">Modificar tarea</a>
+                                <a href="{% url 'eliminar_tarea' tarea.id %}" class="btn btn-cancel">Eliminar tarea</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>No hay tareas disponibles.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

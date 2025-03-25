@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen</title>
+    <style>
+/* Cyberpunk Neon Theme */
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    color: #0ff; /* Neon cyan */
+    background: linear-gradient(135deg, #000 0%, #1a0033 100%);
+    min-height: 100vh;
+}
+
+/* Scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 255, 0.05),
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline 6s linear infinite;
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100vh; }
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(20, 20, 40, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3),
+                0 0 45px rgba(100, 0, 255, 0.2);
+    border: 1px solid #0ff;
+    backdrop-filter: blur(5px);
+    animation: pulse 4s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.4); }
+    100% { box-shadow: 0 0 20px rgba(100, 0, 255, 0.3); }
+}
+
+h1 {
+    color: #0ff;
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+.pregunta {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: rgba(30, 30, 50, 0.7);
+    border-radius: 8px;
+    border: 1px solid #0ff;
+    transition: all 0.3s ease;
+}
+
+.pregunta:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    transform: translateX(5px);
+}
+
+.pregunta p {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: #0ff;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.pregunta label {
+    display: block;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(40, 40, 60, 0.7);
+    border-radius: 5px;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.pregunta label:hover {
+    background-color: rgba(50, 50, 70, 0.9);
+    border-color: #0ff;
+}
+
+input[type="text"] {
+    background-color: rgba(30, 30, 50, 0.7);
+    border: 1px solid #0ff;
+    color: #0ff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 15px;
+    font-family: 'Courier New', monospace;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #0ff;
+    border-radius: 50%;
+    margin-right: 15px;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+input[type="checkbox"] {
+    border-radius: 3px;
+}
+
+input[type="radio"]:checked::before,
+input[type="checkbox"]:checked::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: #0ff;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
+}
+
+input[type="checkbox"]:checked::before {
+    border-radius: 2px;
+}
+
+#time {
+    font-size: 2em;
+    color: #ff0055; /* Neon red */
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+    font-weight: bold;
+    letter-spacing: 2px;
+    animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+.btn {
+    background: linear-gradient(135deg, #ff0055 0%, #990033 100%);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 40px auto 0;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #ff0066 0%, #cc0044 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: translateY(-3px);
+}
+
+/* Glitch effect on hover */
+.btn:hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 45%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 55%
+    );
+    animation: glitch 0.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+    0% { transform: translateX(-5px); }
+    100% { transform: translateX(5px); }
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    .pregunta {
+        padding: 15px;
+    }
+}
+    </style>
+     <link rel="stylesheet" href="css.css">
+    <script>
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    document.getElementById("examen-form").submit();
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            var tenMinutes = 60 * 10,
+                display = document.querySelector('#time');
+            startTimer(tenMinutes, display);
+        };
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Examen de {{ cuestionario.nombre }}</h1>
+
+        <div id="time">10:00</div>
+
+        <form method="POST" id="examen-form">
+            {% csrf_token %}
+
+            {% for pregunta in preguntas %}
+                <div class="pregunta">
+                    <p>{{ pregunta.pregunta }}</p>
+
+                    {% if pregunta.tipo == 'RL' %}
+                        <input type="text" name="pregunta_{{ pregunta.id }}" placeholder="Rellenar aquí">
+                    
+                    {% elif pregunta.tipo == 'FV' %}
+                        <label>
+                            <input type="radio" name="pregunta_{{ pregunta.id }}" value="Verdadero"> Verdadero
+                        </label>
+                        <label>
+                            <input type="radio" name="pregunta_{{ pregunta.id }}" value="Falso"> Falso
+                        </label>
+
+                    {% elif pregunta.tipo == 'OM' %}
+                        <p>Selecciona las respuestas correctas:</p>
+                        {% for opcion in pregunta.opciones_divididas %}
+                            <label>
+                                <input type="checkbox" name="pregunta_{{ pregunta.id }}_opciones" value="{{ opcion|slice:':1' }}">
+                                {{ opcion }}
+                            </label><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn">Enviar Examen</button>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control del LED en Pin 5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d6f9ff;
+            margin: 0;
+            padding: 0;
+            color: #0d6d61;
+        }
+    
+        header {
+            background-color: #666bd4;
+            padding: 10px;
+        }
+    
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+    
+        nav ul li {
+            margin: 0 15px;
+        }
+    
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+        }
+    
+        nav ul li a:hover {
+            background-color: #850235;
+            border-radius: 5px;
+        }
+    
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    
+        h1 {
+            margin-bottom: 20px;
+        }
+    
+        .led-control {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+    
+        .led-control h2 {
+            margin-bottom: 10px;
+            color: #850235;
+        }
+    
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+    
+        .button {
+            background-color: #666bd4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    
+        .button:hover {
+            background-color: #850235;
+        }
+    
+        .status-bar {
+            margin-top: 20px;
+            background-color: #e0f7fa;
+            border-radius: 5px;
+            padding: 10px;
+            font-weight: bold;
+            color: #004d40;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'control_led_view' %}">LED</a></li>
+                <li><a href="{% url 'control_leds_view' %}">LEDS</a></li>
+                <li><a href="{% url 'control_ledrgb_view' %}">RGB</a></li>
+                <li><a href="{% url 'control_servo_view' %}">Servo</a></li>
+                <li><a href="http://127.0.0.1:8000/administrador/admin-principal/">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <h1>Control del LED en Pin 5</h1>
+        <div class="led-control">
+            <h2>LED en Pin 5</h2>
+            <div id="status" class="status-bar">Estado: Apagado</div>
+            <div class="buttons">
+                <button class="button" onclick="controlLED('LED5', 'ON')">Encender</button>
+                <button class="button" onclick="controlLED('LED5', 'OFF')">Apagar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para comunicación -->
+    <script>
+        function controlLED(led, action) {
+            fetch(`/administrador/control-led/${led}/${action}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    updateStatus(action); // Actualiza el estado visualmente
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updateStatus(action) {
+            const statusElement = document.getElementById('status');
+            if (action === 'ON') {
+                statusElement.textContent = 'Estado: Encendido';
+                statusElement.style.backgroundColor = '#c8e6c9'; // Verde claro
+                statusElement.style.color = '#1b5e20'; // Verde oscuro
+            } else if (action === 'OFF') {
+                statusElement.textContent = 'Estado: Apagado';
+                statusElement.style.backgroundColor = '#ffcdd2'; // Rojo claro
+                statusElement.style.color = '#b71c1c'; // Rojo oscuro
+            }
+        }
+    </script>
+</body>
+
+</html>

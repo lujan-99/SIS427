@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Editar Tema{% else %}Agregar Tema{% endif %}</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000; /* Fondo negro */
+    margin: 0;
+    padding: 0;
+    color: #00ff00; /* Verde lechuga fosforescente */
+    background: linear-gradient(135deg, #000000, #4b0082); /* Degradado de fondo */
+}
+
+.container {
+    max-width: 700px; /* Cambiado de 600px a 700px para coincidir con el primero */
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #4b0082; /* Morado */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Añadido para coincidir con el primero */
+}
+
+h1 {
+    color: #00ff00;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Añadido para coincidir con el primero */
+}
+
+form p {
+    font-size: 1.2em; /* Añadido para coincidir con el primero */
+    color: #00ff00; /* Añadido para coincidir con el primero */
+    margin-bottom: 30px; /* Cambiado de 15px a 30px */
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn {
+    background-color: #850235;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    text-decoration: none; /* Añadido para coincidir con el primero */
+}
+
+.btn:hover {
+    background-color: #a83b44;
+}
+
+.btn-cancel {
+    background-color: #333;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    cursor: pointer; /* Añadido para mejor usabilidad */
+}
+
+.btn-cancel:hover {
+    background-color: #555;
+}
+
+/* Añadido para coincidir con el primero */
+.form-control {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #333;
+    color: #00ff00;
+}
+
+@media (max-width: 600px) {
+    form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn, .btn-cancel {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .btn-container {
+        flex-direction: column;
+    }
+}
+    </style>
+    
+</head>
+
+<body>
+    <div class="container">
+        <h1>{% if form.instance.pk %}Editar Tema{% else %}Agregar Tema{% endif %}</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="btn-container">
+                <button type="submit" class="btn">{% if form.instance.pk %}Guardar Cambios{% else %}Agregar{% endif %}</button>
+                <a href="{% url 'detalle_materia_admin' materia.id %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

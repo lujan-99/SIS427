@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pelicula.titulo }}</title>
+    <style>
+
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <header>
+        <div class="titulo-header">Estudiante</div>
+        <div>
+            <a href="{% url 'cliente_principal' %}" class="acceder-boton">Home</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Perfil del Usuario</h1>
+        <div class="usuario-detalle">
+            <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+            <p><strong>Email:</strong> {{ usuario.email }}</p>
+            <p><strong>Nivel:</strong> {{ usuario.get_nivel_display }}</p>
+            <p><strong>Apellidos:</strong> {{ perfil.apellidos }}</p>
+            <p><strong>Fecha de Nacimiento:</strong> {{ perfil.fecha_nacimiento }}</p>
+            <p><strong>Dirección:</strong> {{ perfil.direccion }}</p>
+            <p><strong>Teléfono:</strong> {{ perfil.telefono }}</p>
+            <p><strong>Biografía:</strong> {{ perfil.biografia }}</p>
+        </div>
+
+        <div class="btn-container">
+            <a href="{% url 'edit_profile_estudiante' usuario.id %}" class="btn">Editar Perfil</a>
+            <a href="{% url 'edit_user_estuidante' usuario.id %}" class="funciones">Editar Usuario</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <style>
+
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Editar Usuario</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Asegúrate de que todos los campos estén incluidos -->
+
+            <div class="btn-container">
+                <button type="submit" class="btn">Guardar</button>
+                <a href="{% url 'cliente_principal' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

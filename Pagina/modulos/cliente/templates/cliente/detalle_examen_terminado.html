@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Examen Terminado</title>
+    <style>
+/* Cyberpunk Neon Theme */
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    color: #0ff; /* Neon cyan */
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #000 0%, #1a0033 100%);
+    min-height: 100vh;
+}
+
+/* Scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 255, 0.05),
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline 6s linear infinite;
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100vh; }
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(10, 10, 30, 0.85);
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3),
+                0 0 45px rgba(100, 0, 255, 0.2);
+    border: 1px solid #0ff;
+    backdrop-filter: blur(5px);
+    animation: pulse 4s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 35px rgba(255, 0, 255, 0.4); }
+    100% { box-shadow: 0 0 25px rgba(100, 0, 255, 0.3); }
+}
+
+h1, h2 {
+    color: #0ff; /* Neon cyan */
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 30px;
+}
+
+.pregunta {
+    margin-bottom: 25px;
+    font-size: 1.2em;
+    line-height: 1.6;
+    color: #0ff;
+}
+
+.pregunta strong {
+    color: #0ff;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.respuesta {
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.respuesta-correcta {
+    color: #00ff00; /* Bright green */
+    background-color: rgba(0, 255, 0, 0.1);
+    padding: 5px 10px;
+    border-left: 3px solid #00ff00;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.respuesta-incorrecta {
+    color: #ff3366; /* Bright pink */
+    background-color: rgba(255, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-left: 3px solid #ff3366;
+    text-shadow: 0 0 5px rgba(255, 51, 102, 0.3);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    transition: all 0.3s ease;
+    color: #0ff;
+}
+
+li:hover {
+    background-color: rgba(0, 255, 255, 0.05);
+    transform: translateX(5px);
+    border-bottom: 1px solid #0ff;
+}
+
+.opciones {
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid #0ff;
+}
+
+.boton {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.boton a {
+    text-decoration: none;
+    background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(0, 115, 230, 0.3);
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+.boton a:hover {
+    background: linear-gradient(135deg, #0088ff 0%, #0066cc 100%);
+    box-shadow: 0 0 25px rgba(0, 136, 255, 0.5);
+    transform: translateY(-3px);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    h2 {
+        font-size: 1.5em;
+    }
+    
+    .opciones {
+        margin-left: 10px;
+    }
+}
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalle del Examen</h1>
+
+        <h2>Nota obtenida: {{ examen_revision.examen.nota }}/100</h2>
+
+        <ul>
+            {% for pregunta in preguntas_con_respuestas %}
+                <li>
+                    <h3>Pregunta: {{ pregunta.pregunta }}</h3>
+                    <p><strong>Respuesta correcta:</strong> <span class="respuesta">{{ pregunta.respuesta_correcta }}</span></p>
+                    <p><strong>Tu respuesta:</strong> <span class="respuesta {% if pregunta.respuesta_usuario == pregunta.respuesta_correcta %}respuesta-correcta{% else %}respuesta-incorrecta{% endif %}">{{ pregunta.respuesta_usuario }}</span></p>
+
+                    {% if pregunta.opciones %}
+                        <p><strong>Opciones:</strong></p>
+                        <ul class="opciones">
+                            {% for opcion in pregunta.opciones %}
+                                <li>{{ opcion }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="boton">
+            <a href="{% url 'detalle_materia_alumno' examen_revision.examen.cuestionario.materia.id %}" class="btn-cancel">Volver a la Materia</a>
+        </div>
+    </div>
+</body>
+</html>

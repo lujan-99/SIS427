@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <style>
+body {
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0a0a12;
+    background: radial-gradient(circle at center, #1a0033 0%, #000000 100%);
+    color: #00fffc;
+}
+
+.login-container {
+    background-color: rgba(10, 10, 20, 0.8);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3),
+                0 0 45px rgba(0, 100, 255, 0.2);
+    max-width: 450px;
+    width: 100%;
+    font-size: 18px;
+    border: 1px solid #00fffc;
+    backdrop-filter: blur(5px);
+    animation: pulse 6s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 35px rgba(0, 200, 255, 0.4); }
+    100% { box-shadow: 0 0 25px rgba(100, 0, 255, 0.3); }
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ff0055;
+    text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+    font-size: 2em;
+    letter-spacing: 2px;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"],
+.login-container input[type="email"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #00fffc;
+    border-radius: 4px;
+    background-color: rgba(20, 20, 30, 0.7);
+    color: #00fffc;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.login-container input:focus {
+    outline: none;
+    border-color: #ff0055;
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+}
+
+button {
+    background-color: #333;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #ff0055 0%, #990033 100%);
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ff0066 0%, #cc0044 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: translateY(-2px);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    color: #00fffc;
+    margin-bottom: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+/* Cyberpunk scanline effect */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 95%,
+        rgba(0, 255, 255, 0.05) 95%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100%; }
+}
+
+    </style>
+        <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" placeholder="Introduce tu correo electrónico" required />
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required />
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+    </div>
+</body>
+
+</html>

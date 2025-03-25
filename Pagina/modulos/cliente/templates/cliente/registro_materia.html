@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Materia</title>
+    <style>
+/* Cyberpunk Neon Theme */
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    color: #0ff; /* Neon cyan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #000 0%, #1a0033 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Scanline effect */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 255, 0.05),
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100vh; }
+}
+
+.container {
+    background-color: rgba(20, 20, 40, 0.9);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3),
+                0 0 45px rgba(100, 0, 255, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid #0ff;
+    backdrop-filter: blur(5px);
+    animation: pulse 4s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.4); }
+    100% { box-shadow: 0 0 20px rgba(100, 0, 255, 0.3); }
+}
+
+h1 {
+    color: #0ff;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+input {
+    margin-bottom: 0;
+    padding: 12px 15px;
+    border: 1px solid #0ff;
+    border-radius: 5px;
+    background-color: rgba(30, 30, 50, 0.7);
+    color: #0ff;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #ff0055; /* Neon pink */
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+}
+
+button {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(133, 2, 53, 0.3);
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #a83b44 0%, #cc0044 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: translateY(-2px);
+}
+
+.back-link {
+    display: block;
+    margin-top: 20px;
+    color: #0ff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.back-link:hover {
+    color: #ff0055;
+    text-decoration: none;
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.3);
+}
+
+/* Glitch effect on hover */
+button:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 45%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 55%
+    );
+    animation: glitch 0.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+    0% { transform: translateX(-5px); }
+    100% { transform: translateX(5px); }
+}
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <h2>Registro en Materia</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="sigla_materia">Sigla de la materia</label>
+            {{ form.sigla_materia }}
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+    <br>
+    <a href="{% url 'cliente_principal' %}">Volver al inicio</a>
+</body>
+
+</html>

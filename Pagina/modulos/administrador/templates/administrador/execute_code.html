@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editor de Código</title>
+    <!-- Importar CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/monokai.min.css">
+    <style>
+/* Cyberpunk Neon Theme */
+body {
+    font-family: 'Courier New', monospace, Arial, sans-serif;
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+    color: #00ff00; /* Neon green text */
+    background: linear-gradient(135deg, #000000, #1a0033); /* Black to deep purple gradient */
+    min-height: 100vh;
+}
+
+.cuerpo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+header {
+    width: 100%;
+    background-color: rgba(75, 0, 130, 0.9); /* Semi-transparent purple */
+    color: #00ff00; /* Neon green */
+    padding: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3); /* Green glow */
+    border-bottom: 1px solid #00ff00;
+}
+
+.SimulacionB {
+    background-color: #850235; /* Dark red */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.SimulacionB a {
+    color: white;
+    text-decoration: none;
+}
+
+.SimulacionB:hover {
+    background-color: #a83b44;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.SimulacionB a:hover {
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    align-items: center;
+}
+
+#editor-container, #output-container {
+    width: 100%;
+    max-width: 800px;
+}
+
+#output {
+    width: 100%;
+    height: 300px;
+    background: #0d001a; /* Dark background */
+    border: 1px solid #00ff00; /* Neon border */
+    padding: 15px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    border-radius: 5px;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.2);
+    color: #00ff00; /* Neon text */
+    line-height: 1.5;
+}
+
+.button-container {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #850235; /* Dark red */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+    background-color: #a83b44;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+h3 {
+    color: #00ff00; /* Neon green */
+    text-align: center;
+    font-size: 1.8em;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+    margin-bottom: 20px;
+}
+
+.error {
+    color: #ff3366; /* Bright pink for errors */
+    text-shadow: 0 0 5px rgba(255, 51, 102, 0.3);
+    font-weight: bold;
+}
+
+/* Terminal-like cursor effect */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+#output:after {
+    content: "|";
+    animation: blink 1s infinite;
+    color: #00ff00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 15px;
+    }
+
+    #editor-container, #output-container {
+        max-width: 100%;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px 15px;
+    }
+}
+    </style>
+        <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="cuerpo">
+        <header>
+            <div class="SimulacionB">
+                <a href="http://127.0.0.1:8000/administrador/admin-principal/">Home</a>
+            </div>
+            <div class="SimulacionB">Editor de Código</div>
+            <div class="SimulacionB">
+                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <div class="container">
+            <div id="editor-container">
+                <h3>Editor de Código</h3>
+                <textarea id="code-editor">// Escribe tu código JavaScript aquí
+console.log('Hola mundo');
+
+// Ejemplo de función
+function sumar(a, b) {
+    return a + b;
+}
+
+// Prueba la función
+console.log(sumar(5, 3));</textarea>
+                <div class="button-container">
+                    <button onclick="ejecutarCodigo()">Ejecutar Código</button>
+                    <button onclick="limpiarSalida()">Limpiar Salida</button>
+                </div>
+            </div>
+
+            <div id="output-container">
+                <h3>Salida</h3>
+                <div id="output"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importar scripts de CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
+
+    <script>
+        // Inicializar CodeMirror
+        var editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+            mode: "javascript",
+            theme: "monokai",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 4,
+            tabSize: 4,
+            lineWrapping: true,
+        });
+
+        // Redefinir console.log para mostrar en nuestro output
+        const outputDiv = document.getElementById('output');
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            const output = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+            appendToOutput(output);
+        };
+
+        function appendToOutput(content, isError = false) {
+            const line = document.createElement('div');
+            line.className = isError ? 'error' : '';
+            line.textContent = content;
+            outputDiv.appendChild(line);
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+
+        function ejecutarCodigo() {
+            const codigo = editor.getValue();
+            try {
+                outputDiv.innerHTML = ''; // Limpiar salida
+                eval(codigo);
+            } catch (error) {
+                appendToOutput(error.message, true);
+            }
+        }
+
+        function limpiarSalida() {
+            outputDiv.innerHTML = '';
+        }
+
+        editor.setSize(null, 300);
+    </script>
+</body>
+
+</html>

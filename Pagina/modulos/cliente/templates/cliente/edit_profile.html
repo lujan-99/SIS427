@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>{% if form.instance.pk %}Editar Película{% else %}Añadir Película{% endif %}</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="btn-container">
+                <button type="submit" class="btn">{% if form.instance.pk %}Editar{% else %}Añadir{% endif %}</button>
+                <a href="{% url 'cliente_principal' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Pregunta</title>
+
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000; /* Fondo negro */
+    margin: 0;
+    padding: 0;
+    color: #00ff00; /* Verde fosforescente */
+    background: linear-gradient(135deg, #000000, #4b0082); /* Degradado negro a morado */
+}
+
+.container {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #4b0082; /* Morado */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Añadido para coincidir con el primero */
+}
+
+h1 {
+    color: #00ff00; /* Verde fosforescente */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+p { /* Nuevo: estilo para párrafos como en el primer CSS */
+    font-size: 1.2em;
+    color: #00ff00;
+    margin-bottom: 30px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn {
+    background-color: #850235; /* Rojo vino */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer; /* Añadido para coincidir */
+    transition: background-color 0.3s ease; /* Añadido "ease" */
+    width: 100%; /* Añadido para coincidir */
+}
+
+.btn:hover {
+    background-color: #a83b44;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #333; /* Fondo oscuro para inputs */
+    color: #00ff00; /* Texto verde */
+}
+
+button[type="submit"] {
+    background-color: #850235; /* Rojo vino */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease; /* Añadido para coincidir */
+}
+
+button[type="submit"]:hover {
+    background-color: #a83b44;
+}
+
+/* Media query para responsividad (copiada del primer CSS) */
+@media (max-width: 600px) {
+    .btn, .btn-cancel {
+        width: 100%;
+        text-align: center;
+    }
+    .btn-container {
+        flex-direction: column;
+    }
+}
+    </style>
+    
+    
+    <script>
+        function toggleOpcionesField() {
+            var tipoPregunta = document.getElementById('id_tipo').value;
+            var opcionesField = document.getElementById('opciones_field');
+            var respuestaField = document.getElementById('id_respuesta');
+            
+            // Mostrar el campo opciones y cambiar el placeholder según el tipo de pregunta
+            if (tipoPregunta === 'OM') {
+                opcionesField.style.display = 'block';
+                respuestaField.placeholder = 'Ingrese la(s) letra(s) de la(s) respuesta(s), ej: A, B';
+            } else {
+                opcionesField.style.display = 'none';
+                respuestaField.placeholder = 'Ingrese la respuesta correcta';
+            }
+        }
+
+        // Llamar a la función al cargar la página
+        window.onload = function() {
+            toggleOpcionesField();
+            document.getElementById('id_tipo').addEventListener('change', toggleOpcionesField);
+        };
+        
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Agregar Pregunta</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.pregunta.label_tag }} {{ form.pregunta }}
+            {{ form.tipo.label_tag }} {{ form.tipo }}
+    
+            <div id="opciones_field" style="display: none;">
+                {{ form.opciones.label_tag }} {{ form.opciones }}
+            </div>
+    
+            {{ form.respuesta.label_tag }} {{ form.respuesta }}
+            <button type="submit">Guardar</button>
+        </form>
+    </div>  
+</body>
+</html>

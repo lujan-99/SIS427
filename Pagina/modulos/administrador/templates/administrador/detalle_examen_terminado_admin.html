@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Examen Revisado</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+    color: #00ff00; /* Neon green text */
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #000000, #4b0082); /* Black to purple gradient */
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(75, 0, 130, 0.8); /* Semi-transparent purple */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.2); /* Green glow shadow */
+    border: 1px solid #00ff00; /* Neon border */
+}
+
+h1, h2 {
+    color: #00ff00; /* Neon green */
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.4); /* Glow effect */
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 1.8em;
+}
+
+.pregunta {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.pregunta strong {
+    color: #00ff00; /* Neon green */
+}
+
+.respuesta {
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.respuesta-correcta {
+    color: #00ff00; /* Neon green */
+    background-color: rgba(0, 255, 0, 0.1);
+    padding: 5px 10px;
+    border-left: 3px solid #00ff00;
+}
+
+.respuesta-incorrecta {
+    color: #ff3366; /* Bright pink */
+    background-color: rgba(255, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-left: 3px solid #ff3366;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+li:hover {
+    background-color: rgba(0, 255, 0, 0.05);
+    transform: translateX(5px);
+}
+
+.opciones {
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid #00ff00;
+}
+
+.boton {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.boton a {
+    text-decoration: none;
+    background-color: #850235; /* Dark red */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.boton a:hover {
+    background-color: #a83b44;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Animation for container */
+@keyframes glow {
+    0% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); }
+    100% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+}
+
+.container {
+    animation: glow 3s infinite;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    h2 {
+        font-size: 1.5em;
+    }
+}
+    </style>
+        <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Detalle del Examen Revisado</h1>
+
+        <h2>Usuario: {{ examen_revision.usuario.nombre }}</h2>
+        <h2>Fecha de Entrega: {{ examen_revision.fecha_entrega }}</h2>
+
+        <ul>
+            {% for pregunta in preguntas_con_respuestas %}
+                <li>
+                    <h3>Pregunta: {{ pregunta.pregunta }}</h3>
+                    <p><strong>Respuesta correcta:</strong> <span class="respuesta">{{ pregunta.respuesta_correcta }}</span></p>
+                    <p><strong>Respuesta del usuario:</strong> <span class="respuesta {% if pregunta.respuesta_usuario == pregunta.respuesta_correcta %}respuesta-correcta{% else %}respuesta-incorrecta{% endif %}">{{ pregunta.respuesta_usuario }}</span></p>
+
+                    {% if pregunta.opciones %}
+                        <p><strong>Opciones:</strong></p>
+                        <ul class="opciones">
+                            {% for opcion in pregunta.opciones %}
+                                <li>{{ opcion }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="boton">
+            <a href="{% url 'detalle_materia_admin' examen_revision.examen.cuestionario.materia.id %}" class="btn-cancel">Volver a la Materia</a>
+        </div>
+    </div>
+</body>
+
+</html>

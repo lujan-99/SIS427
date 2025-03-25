@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de LEDs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d6f9ff;
+            margin: 0;
+            padding: 0;
+            color: #0d6d61;
+        }
+
+        header {
+            background-color: #666bd4;
+            padding: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+        }
+
+        nav ul li a:hover {
+            background-color: #850235;
+            border-radius: 5px;
+        }
+
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .column {
+            text-align: center;
+        }
+
+        .column h2 {
+            margin-bottom: 10px;
+            color: #850235;
+        }
+
+        .status-bar {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #e0f7fa;
+            color: #004d40;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .button {
+            background-color: #666bd4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .button:hover {
+            background-color: #850235;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'control_led_view' %}">LED</a></li>
+                <li><a href="{% url 'control_leds_view' %}">LEDS</a></li>
+                <li><a href="{% url 'control_ledrgb_view' %}">RGB</a></li>
+                <li><a href="{% url 'control_servo_view' %}">Servo</a></li>
+                <li><a href="http://127.0.0.1:8000/administrador/admin-principal/">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Control de LEDs (Pines 6, 7, 8 y Todos)</h1>
+        <div class="columns">
+            <!-- Columna Rojo -->
+            <div class="column">
+                <h2>Rojo</h2>
+                <div id="statusRed" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('LED6', 'ON', 'statusRed')">Encender</button>
+                    <button class="button" onclick="controlLED('LED6', 'OFF', 'statusRed')">Apagar</button>
+                    <button class="button" onclick="controlLED('LED6', 'BLINK', 'statusRed')">Parpadear</button>
+                </div>
+            </div>
+
+            <!-- Columna Verde -->
+            <div class="column">
+                <h2>Verde</h2>
+                <div id="statusGreen" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('LED7', 'ON', 'statusGreen')">Encender</button>
+                    <button class="button" onclick="controlLED('LED7', 'OFF', 'statusGreen')">Apagar</button>
+                    <button class="button" onclick="controlLED('LED7', 'BLINK', 'statusGreen')">Parpadear</button>
+                </div>
+            </div>
+
+            <!-- Columna Amarillo -->
+            <div class="column">
+                <h2>Amarillo</h2>
+                <div id="statusYellow" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('LED8', 'ON', 'statusYellow')">Encender</button>
+                    <button class="button" onclick="controlLED('LED8', 'OFF', 'statusYellow')">Apagar</button>
+                    <button class="button" onclick="controlLED('LED8', 'BLINK', 'statusYellow')">Parpadear</button>
+                </div>
+            </div>
+
+            <!-- Columna Todos -->
+            <div class="column">
+                <h2>Todos</h2>
+                <div id="statusAll" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('LED678', 'ON', 'statusAll')">Encender Todos</button>
+                    <button class="button" onclick="controlLED('LED678', 'OFF', 'statusAll')">Apagar Todos</button>
+                    <button class="button" onclick="controlLED('LED678', 'BLINK', 'statusAll')">Parpadear Todos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function controlLED(led, action, statusId) {
+            fetch(`/administrador/control-leds/${led}/${action}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    updateStatus(action, statusId); // Actualiza el estado visualmente
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updateStatus(action, statusId) {
+            const statusElement = document.getElementById(statusId);
+            if (action === 'ON') {
+                statusElement.textContent = 'Estado: Encendido';
+                statusElement.style.backgroundColor = '#c8e6c9'; // Verde claro
+                statusElement.style.color = '#1b5e20'; // Verde oscuro
+            } else if (action === 'OFF') {
+                statusElement.textContent = 'Estado: Apagado';
+                statusElement.style.backgroundColor = '#ffcdd2'; // Rojo claro
+                statusElement.style.color = '#b71c1c'; // Rojo oscuro
+            } else if (action === 'BLINK') {
+                statusElement.textContent = 'Estado: Parpadeando';
+                statusElement.style.backgroundColor = '#fff9c4'; // Amarillo claro
+                statusElement.style.color = '#f57f17'; // Amarillo oscuro
+            }
+        }
+    </script>
+</body>
+
+</html>

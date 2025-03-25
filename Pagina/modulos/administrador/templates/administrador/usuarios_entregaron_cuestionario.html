@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios que entregaron el cuestionario</title>
+    <style>
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function revisarEntrega(id) {
+            $.ajax({
+                url: "{% url 'toggle_revisado' %}",
+                type: 'POST',
+                data: {
+                    'entrega_id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Agregamos el token CSRF
+                },
+                success: function(data) {
+                    if (data.success) {
+                        const checkbox = document.getElementById(`revisado_${id}`);
+                        checkbox.checked = data.revisado;  // Actualizamos el checkbox
+                    } else {
+                        console.error('Error al actualizar el estado.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    </script>
+        <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Usuarios que entregaron el cuestionario: {{ cuestionario.nombre }}</h2>
+    
+        <ul>
+            {% for entrega in entregas %}
+            <li>
+                <div>
+                    {{ entrega.usuario.nombre }}
+                </div>
+                <div class="checkbox-container">
+                    <label for="revisado_{{ entrega.id }}">Revisado</label>
+                    <input type="checkbox" id="revisado_{{ entrega.id }}" 
+                           {% if entrega.revisado %}checked disabled{% else %}onclick="revisarEntrega({{ entrega.id }})"{% endif %}>
+                </div>
+                <div>
+                    <!-- Aquí usa 'entrega.id' para acceder al examen revision -->
+                    <a href="{% url 'detalle_examen_terminado_admin' entrega.id %}" class="file-link">Ver detalles</a>
+                </div>
+            </li>
+            {% empty %}
+            <li class="empty">No hay entregas para este cuestionario.</li>
+            {% endfor %}
+        </ul>
+    
+        <div class="btn-container">
+            <a href="{% url 'detalle_materia_admin' materia_id=cuestionario.materia.id %}">Volver a la materia</a>
+        </div>
+    </div>
+    
+    
+</body>
+
+</html>

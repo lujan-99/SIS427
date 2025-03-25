@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control del LED en Pin 5</title>
+    <style>
+
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'control_led_viewc' %}">LED</a></li>
+                <li><a href="{% url 'control_leds_viewc' %}">LEDS</a></li>
+                <li><a href="{% url 'control_ledrgb_viewc' %}">RGB</a></li>
+                <li><a href="{% url 'control_servo_viewc' %}">Servo</a></li>
+                <li></li>
+                    <a href="{% url 'cliente_principal' %}" class="acceder-boton">Home</a>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <h1>Control del LED en Pin 5</h1>
+        <div class="led-control">
+            <h2>LED en Pin 5</h2>
+            <div id="status" class="status-bar">Estado: Apagado</div>
+            <div class="buttons">
+                <button class="button" onclick="controlLED('LED5', 'ON')">Encender</button>
+                <button class="button" onclick="controlLED('LED5', 'OFF')">Apagar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para comunicación -->
+    <script>
+        function controlLED(led, action) {
+            fetch(`/cliente/control-led/${led}/${action}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    updateStatus(action); // Actualiza el estado visualmente
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updateStatus(action) {
+            const statusElement = document.getElementById('status');
+            if (action === 'ON') {
+                statusElement.textContent = 'Estado: Encendido';
+                statusElement.style.backgroundColor = '#c8e6c9'; // Verde claro
+                statusElement.style.color = '#1b5e20'; // Verde oscuro
+            } else if (action === 'OFF') {
+                statusElement.textContent = 'Estado: Apagado';
+                statusElement.style.backgroundColor = '#ffcdd2'; // Rojo claro
+                statusElement.style.color = '#b71c1c'; // Rojo oscuro
+            }
+        }
+    </script>
+</body>
+
+</html>

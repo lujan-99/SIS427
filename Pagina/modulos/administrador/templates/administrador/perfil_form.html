@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Editar Perfil{% else %}Añadir Perfil{% endif %}</title>
+    <style>
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #0a0a12;
+    margin: 0;
+    padding: 0;
+    color: #00fffc;
+    background: radial-gradient(circle at center, #1a0033 0%, #000000 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(10, 10, 20, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3),
+                0 0 45px rgba(0, 100, 255, 0.2);
+    border: 1px solid #00fffc;
+    backdrop-filter: blur(5px);
+    animation: pulse 6s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 35px rgba(0, 200, 255, 0.4); }
+    100% { box-shadow: 0 0 25px rgba(100, 0, 255, 0.3); }
+}
+
+h1 {
+    color: #00fffc;
+    text-align: center;
+    font-size: 2.2em;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #ff0055;
+    margin-bottom: 8px;
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.3);
+    letter-spacing: 1px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="file"],
+form textarea {
+    padding: 12px 15px;
+    margin-bottom: 0;
+    border: 1px solid #00fffc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #00fffc;
+    background-color: rgba(20, 20, 30, 0.7);
+    transition: all 0.3s ease;
+}
+
+form input:focus,
+form textarea:focus {
+    outline: none;
+    border-color: #ff0055;
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+}
+
+form textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+.btn {
+    background: linear-gradient(135deg, #ff0055 0%, #990033 100%);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+    flex: 1;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #ff0066 0%, #cc0044 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-cancel {
+    background: linear-gradient(135deg, #333 0%, #555 100%);
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    flex: 1;
+}
+
+.btn-cancel:hover {
+    background: linear-gradient(135deg, #444 0%, #666 100%);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Cyberpunk scanline effect */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 95%,
+        rgba(0, 255, 255, 0.05) 95%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100%; }
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .btn-container {
+        flex-direction: column;
+    }
+    
+    .btn, .btn-cancel {
+        width: 100%;
+    }
+}
+    </style>
+        <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>{% if form.instance.pk %}Editar Perfil{% else %}Añadir Perfil{% endif %}</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="btn-container">
+                <button type="submit" class="btn">{% if form.instance.pk %}Editar{% else %}Añadir{% endif %}</button>
+                <a href="{% url 'admin_principal' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

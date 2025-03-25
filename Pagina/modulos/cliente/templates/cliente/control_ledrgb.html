@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de RGB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d6f9ff;
+            margin: 0;
+            padding: 0;
+            color: #0d6d61;
+        }
+
+        header {
+            background-color: #666bd4;
+            padding: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+        }
+
+        nav ul li a:hover {
+            background-color: #850235;
+            border-radius: 5px;
+        }
+
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .column {
+            text-align: center;
+        }
+
+        .column h2 {
+            margin-bottom: 10px;
+            color: #850235;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .button {
+            background-color: #666bd4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .button:hover {
+            background-color: #850235;
+        }
+
+        .status-bar {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #e0f7fa;
+            color: #004d40;
+        }
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'control_led_viewc' %}">LED</a></li>
+                <li><a href="{% url 'control_leds_viewc' %}">LEDS</a></li>
+                <li><a href="{% url 'control_ledrgb_viewc' %}">RGB</a></li>
+                <li><a href="{% url 'control_servo_viewc' %}">Servo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Control de RGB</h1>
+        <div class="columns">
+            <!-- Columna Rojo -->
+            <div class="column">
+                <h2>Rojo</h2>
+                <div id="statusRed" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('RGB_RED', 'OFF', 'statusRed')">Encender</button>
+                    <button class="button" onclick="controlLED('RGB_RED', 'ON', 'statusRed')">Apagar</button>
+                    <button class="button" onclick="controlLED('RGB_RED', 'BLINK', 'statusRed')">Parpadear</button>
+                </div>
+            </div>
+
+            <!-- Columna Verde -->
+            <div class="column">
+                <h2>Verde</h2>
+                <div id="statusGreen" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('RGB_GREEN', 'OFF', 'statusGreen')">Encender</button>
+                    <button class="button" onclick="controlLED('RGB_GREEN', 'ON', 'statusGreen')">Apagar</button>
+                    <button class="button" onclick="controlLED('RGB_GREEN', 'BLINK', 'statusGreen')">Parpadear</button>
+                </div>
+            </div>
+
+            <!-- Columna Azul -->
+            <div class="column">
+                <h2>Azul</h2>
+                <div id="statusBlue" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('RGB_BLUE', 'OFF', 'statusBlue')">Encender</button>
+                    <button class="button" onclick="controlLED('RGB_BLUE', 'ON', 'statusBlue')">Apagar</button>
+                    <button class="button" onclick="controlLED('RGB_BLUE', 'BLINK', 'statusBlue')">Parpadear</button>
+                </div>
+            </div>
+
+            <!-- Columna Todos -->
+            <div class="column">
+                <h2>Todos</h2>
+                <div id="statusAll" class="status-bar">Estado: Apagado</div>
+                <div class="buttons">
+                    <button class="button" onclick="controlLED('RGB_ALL', 'OFF', 'statusAll')">Encender Todos</button>
+                    <button class="button" onclick="controlLED('RGB_ALL', 'ON', 'statusAll')">Apagar Todos</button>
+                    <button class="button" onclick="controlLED('RGB_ALL', 'BLINK', 'statusAll')">Parpadear Todos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function controlLED(led, action, statusId) {
+            fetch(`/cliente/control-ledrgb/${led}/${action}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    updateStatus(action, statusId); // Actualiza el estado visualmente
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updateStatus(action, statusId) {
+            const statusElement = document.getElementById(statusId);
+            if (action === 'OFF') {
+                statusElement.textContent = 'Estado: Encendido';
+                statusElement.style.backgroundColor = '#c8e6c9'; // Verde claro
+                statusElement.style.color = '#1b5e20'; // Verde oscuro
+            } else if (action === 'ON') {
+                statusElement.textContent = 'Estado: Apagado';
+                statusElement.style.backgroundColor = '#ffcdd2'; // Rojo claro
+                statusElement.style.color = '#b71c1c'; // Rojo oscuro
+            } else if (action === 'BLINK') {
+                statusElement.textContent = 'Estado: Parpadeando';
+                statusElement.style.backgroundColor = '#fff9c4'; // Amarillo claro
+                statusElement.style.color = '#f57f17'; // Amarillo oscuro
+            }
+        }
+    </script>
+</body>
+
+</html>

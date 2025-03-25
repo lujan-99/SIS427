@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materia - Estudiante</title>
+    <style>
+/* Cyberpunk Neon Theme */
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    color: #0ff; /* Neon cyan */
+    background: linear-gradient(135deg, #000 0%, #1a0033 100%);
+    min-height: 100vh;
+}
+
+/* Scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 255, 0.05),
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1000;
+    animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100vh; }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(75, 0, 130, 0.9); /* Semi-transparent purple */
+    color: #0ff;
+    padding: 15px 30px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    border-bottom: 1px solid #0ff;
+}
+
+.titulo-header {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(133, 2, 53, 0.3);
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.acceder-boton {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(133, 2, 53, 0.3);
+}
+
+.acceder-boton:hover {
+    background: linear-gradient(135deg, #a83b44 0%, #cc0044 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: translateY(-2px);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(20, 20, 40, 0.85);
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3),
+                0 0 45px rgba(100, 0, 255, 0.2);
+    border: 1px solid #0ff;
+    backdrop-filter: blur(5px);
+    animation: pulse 6s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 35px rgba(255, 0, 255, 0.4); }
+    100% { box-shadow: 0 0 25px rgba(100, 0, 255, 0.3); }
+}
+
+h1 {
+    color: #0ff;
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    letter-spacing: 2px;
+}
+
+.usuario-detalle-container {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: rgba(30, 30, 50, 0.7);
+    border-radius: 8px;
+    border: 1px solid #0ff;
+}
+
+.usuario-detalle-container p {
+    font-size: 1.2em;
+    color: #0ff;
+    line-height: 1.6;
+}
+
+h2 {
+    color: #0ff;
+    border-bottom: 2px solid #ff0055; /* Neon pink */
+    padding-bottom: 10px;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+}
+
+.temas-container {
+    margin-bottom: 40px;
+}
+
+.tema-detail {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #0d6d61 0%, #1a8b7d 100%);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(13, 109, 97, 0.3);
+    border: 1px solid #0ff;
+}
+
+.tema-detail h3 {
+    color: white;
+    font-size: 1.5em;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.contenido,
+.tareas {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(30, 30, 50, 0.7);
+    border-radius: 8px;
+    border: 1px solid #0ff;
+}
+
+.contenido h4,
+.tareas h4 {
+    color: #0ff;
+    font-size: 1.3em;
+    border-bottom: 1px solid #ff0055;
+    padding-bottom: 10px;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 20px;
+    background-color: rgba(40, 40, 60, 0.7);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+li:hover {
+    background-color: rgba(50, 50, 70, 0.9);
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+li p {
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+    color: #0ff;
+}
+
+li p strong {
+    color: #ff0055;
+}
+
+li a {
+    color: #0ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+li a:hover {
+    color: #ff0055;
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.3);
+}
+
+.btn-agregar-tarea {
+    background: linear-gradient(135deg, #ed9e44 0%, #d8893b 100%);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(237, 158, 68, 0.3);
+}
+
+.btn-agregar-tarea:hover {
+    background: linear-gradient(135deg, #d8893b 0%, #c57632 100%);
+    box-shadow: 0 0 25px rgba(216, 137, 59, 0.5);
+    transform: translateY(-3px);
+}
+
+.btn-agregar-tarea[disabled] {
+    background: linear-gradient(135deg, #333 0%, #555 100%);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-cancelar {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(133, 2, 53, 0.3);
+}
+
+.btn-cancelar:hover {
+    background: linear-gradient(135deg, #a83b44 0%, #cc0044 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: translateY(-3px);
+}
+
+.file-link {
+    display: inline-block;
+    padding: 8px 15px;
+    background: linear-gradient(135deg, #666bd4 0%, #850235 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(102, 107, 212, 0.3);
+}
+
+.file-link:hover {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+    transform: translateY(-2px);
+}
+
+.cuestionarios-container {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: rgba(30, 30, 50, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    border: 1px solid #0ff;
+}
+
+.cuestionarios-container h3 {
+    color: #0ff;
+    font-size: 1.8em;
+    border-bottom: 2px solid #ff0055;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+}
+
+.cuestionarios-container li {
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: rgba(40, 40, 60, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.cuestionarios-container li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+    background-color: rgba(50, 50, 70, 0.9);
+}
+
+.cuestionarios-container li p {
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+    color: #0ff;
+}
+
+.cuestionarios-container li p strong {
+    color: #ff0055;
+}
+
+.cuestionarios-container form {
+    margin-top: 15px;
+}
+
+.cuestionarios-container .btn-examen {
+    background: linear-gradient(135deg, #666bd4 0%, #850235 100%);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(102, 107, 212, 0.3);
+}
+
+.cuestionarios-container .btn-examen:hover {
+    background: linear-gradient(135deg, #850235 0%, #a83b44 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
+    transform: scale(1.05);
+}
+
+.cuestionarios-container p.empty {
+    font-size: 1.2em;
+    color: #ff0055;
+    text-align: center;
+    text-shadow: 0 0 5px rgba(255, 0, 85, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    .tema-detail, .contenido, .tareas, .cuestionarios-container {
+        padding: 15px;
+    }
+}
+    </style>
+     <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+    <header>
+        <div class="titulo-header">Estudiante</div>
+        <div>
+            <a href="{% url 'cliente_principal' %}" class="acceder-boton">Home</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Materia</h1>
+
+
+        <div class="usuario-detalle-container">
+            <h2>Información Básica</h2>
+            <p><strong>Nombre:</strong> {{ materia.nombre }}</p>
+            <p><strong>Sigla:</strong> {{ materia.sigla }}</p>
+        </div>
+        <div class="cuestionarios-container">
+            <h3>Cuestionarios Disponibles</h3>
+            <ul>
+                {% for item in cuestionarios_con_resultado %}
+                <li>
+                    <p><strong>Nombre:</strong> {{ item.cuestionario.nombre }}</p>
+        
+                    <!-- Mostrar exámenes que el usuario ya haya realizado -->
+                    <h4>Exámenes Realizados:</h4>
+                    <ul>
+                        {% for examen in examenes_usuario %}
+                        {% if examen.examen.cuestionario.id == item.cuestionario.id %}
+                        <li>
+                            <p><strong>Examen:</strong> {{ examen.examen.id }}</p>
+                            <p><strong>Nota:</strong> {{ examen.examen.nota }}/100</p>
+                            <a href="{% url 'detalle_examen_terminado' examen.id %}" class="file-link">Ver detalles</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+        
+                    <!-- Verificar si el botón debe mostrarse o no -->
+                    {% if item.ya_realizado == False %}
+                    <!-- Botón para realizar el examen si aún no ha alcanzado el límite de 2 exámenes -->
+                    <form method="GET" action="{% url 'tomar_examen' item.cuestionario.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-examen">Realizar Examen</button>
+                    </form>
+                    {% else %}
+                    <!-- Mensaje cuando ya alcanzó el límite -->
+                    <p><strong>Ya ha realizado 2 o más exámenes para este cuestionario.</strong></p>
+                    {% endif %}
+                </li>
+                {% empty %}
+                <p>No hay cuestionarios disponibles para esta materia.</p>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="temas-container">
+            {% for tema in temas %}
+            <div class="tema-detail">
+                <h3>Nombre del Tema: {{ tema.nombre }}</h3>
+
+                <div class="contenido">
+                    <h4>Contenidos</h4>
+                    {% if tema.contenidos.all %}
+                    <ul>
+                        {% for contenido in tema.contenidos.all %}
+                        <li>
+                            <p><strong>Título:</strong> {{ contenido.titulo }}</p>
+                            <p><strong>Descripción:</strong> {{ contenido.descripcion }}</p>
+                            <p><strong>Archivo:</strong>
+                                <a class="file-link" href="{{ contenido.archivo.url }}" target="_blank">Ver/Descargar
+                                    PDF</a>
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No hay contenidos disponibles.</p>
+                    {% endif %}
+                </div>
+
+                <div class="tareas">
+                    <h4>Tareas</h4>
+                    {% if tema.tareas.exists %}
+                    <ul>
+                        {% for tarea in tema.tareas.all %}
+                        <li>
+                            <p><strong>Título:</strong> {{ tarea.titulo }}</p>
+                            <p><strong>Descripción:</strong> {{ tarea.descripcion }}</p>
+                            <p><strong>Archivo:</strong>
+                                {% if tarea.archivo_pdf %}
+                                <a class="file-link" href="{{ tarea.archivo_pdf.url }}" target="_blank">Ver/Descargar
+                                    PDF</a>
+                                {% else %}
+                                No hay archivo disponible.
+                                {% endif %}
+                            </p>
+                            {% if tarea.id in entregas_por_tarea %}
+                            <p><strong>Ya subió esta tarea.</strong></p>
+                            {% else %}
+                            <a href="{% url 'agregar_tarea_alumno' tarea_id=tarea.id %}">
+                                <button type="button" class="btn-agregar-tarea">Agregar Tarea</button>
+                            </a>
+
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No hay tareas disponibles.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+
+    </script>
+</body>
+
+</html>
